@@ -13,9 +13,10 @@ development:
   <<: *default
   database: kodisha_development
 
+
 test:
   <<: *default
-  database: kodisha_test
+  url: <%= ENV["DATABASE_URL"] %>
 
 production:
   <<: *default
