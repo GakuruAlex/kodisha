@@ -18,6 +18,7 @@ class User < ApplicationRecord
   enum :role, { guest: 0, member: 1, admin: 2 }
   has_secure_password
   has_many :sessions, dependent: :destroy
+  has_one :tenant_profile
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 end
