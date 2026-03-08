@@ -8,20 +8,24 @@ unless annotate_spec
   abort("Annotate gem not found. Make sure it’s installed and run with `bundle exec`")
 end
 
-# Patch annotate.rb
-annotate_rb = File.join(annotate_spec.full_gem_path, "lib/annotate.rb")
-text = File.read(annotate_rb)
-text.gsub!("File.exists?", "File.exist?")
-File.write(annotate_rb, text)
+gem_path = annotate_spec.full_gem_path
 
-# Patch annotate_models.rb (correct path)
-annotate_models = File.join(annotate_spec.full_gem_path, "lib/annotate/annotate_models.rb")
-if File.exist?(annotate_models)
-  text_models = File.read(annotate_models)
-  text_models.gsub!(/\bFixnum\b/, "Integer")
-  File.write(annotate_models, text_models)
-else
-  puts "⚠ annotate_models.rb not found — skipping Fixnum patch"
+def patch_file(path)
+  return unless File.exist?(path)
+
+  text = File.read(path)
+  updated = text.gsub("File.exists?", "File.exist?")
+                .gsub(/\bFixnum\b/, "Integer")
+
+  File.write(path, updated)
+  puts "✔ Patched: #{path}"
 end
 
-puts "✅ Annotate patched for Ruby 3+ and Rails 8.1"
+# Patch library files
+patch_file(File.join(gem_path, "lib/annotate.rb"))
+patch_file(File.join(gem_path, "lib/annotate/annotate_models.rb"))
+
+# 🔥 Patch CLI executable (THIS fixes your current error)
+patch_file(File.join(gem_path, "bin/annotate"))
+
+puts "Annotate fully patched for Ruby 3.4+ and Rails 8.1"
