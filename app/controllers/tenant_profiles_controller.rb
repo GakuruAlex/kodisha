@@ -1,6 +1,5 @@
 class TenantProfilesController < ApplicationController
-
-  before_action :set_tenant_profile, only: [:show]
+  before_action :set_tenant_profile, only: [ :show ]
     def index
       @tenant_profiles = TenantProfile.all
     end

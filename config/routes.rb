@@ -13,8 +13,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root 'tenant_profiles#index'
+  root "tenant_profiles#index"
 
-  #Tenant Profile routes
-  get 'tenants' => "tenant_profiles#index"
+  # Tenant Profile routes
+  get "tenants" => "tenant_profiles#index"
 end
