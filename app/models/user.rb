@@ -8,6 +8,9 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  role            :integer          default(0), not null
+#  firstname       :string
+#  lastname        :string
+#  phonenumber     :string
 #
 # Indexes
 #
