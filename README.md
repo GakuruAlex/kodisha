@@ -1,5 +1,23 @@
 # README
 
+
+
+# Github actions
+1. Run the following command to check for rubocop offenses
+```bash
+bundle exec rubocop 
+```
+
+2. Ensure test db works
+```bash
+bin/rails db:test:prepare
+```
+Then run
+
+```bash
+bin/rails test
+```
+
 # Annotate
 add annotate in Gemfile
 ```ruby
