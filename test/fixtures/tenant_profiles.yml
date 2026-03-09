@@ -16,12 +16,7 @@
 
 one:
   user: one
-  firstname: MyString
-  lastname: MyString
-  phonenumber: MyString
+
 
 two:
   user: two
-  firstname: MyString
-  lastname: MyString
-  phonenumber: MyString
