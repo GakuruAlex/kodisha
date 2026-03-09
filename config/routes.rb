@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  # User routes
+  get "users" => "users#index", as: :users
+
+  get "users/new" => "users#new", as: :new_user
+  post "users" => "users#create"
+
+  get "users/:id" => "users#show", as: :user
+  # Defines the root path route ("/")
+  root "users#index"
+
+  # Tenant Profile routes
+  get "tenants" => "tenant_profiles#index"
   resource :session
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -10,11 +22,4 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
-  root "tenant_profiles#index"
-
-  # Tenant Profile routes
-  get "tenants" => "tenant_profiles#index"
 end
