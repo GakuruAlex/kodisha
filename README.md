@@ -2,13 +2,22 @@
 
 
 
-# Github actions
-1. Run the following command to check for rubocop offenses
+# GitHub actions
+Run
+```bash
+ bash github_actions_helper.sh 
+
+```
+to check GitHub actions errors
+
+OR
+
+Run the following command to check for RuboCop offenses
 ```bash
 bundle exec rubocop 
 ```
 
-2. Ensure test db works
+Ensure test db works
 ```bash
 bin/rails db:test:prepare
 ```
