@@ -14,4 +14,6 @@
 
 class TenantProfile < ApplicationRecord
   belongs_to :user
+  has_many :leases
+  has_many :houses, through: :leases
 end

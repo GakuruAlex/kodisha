@@ -10,9 +10,55 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_08_153109) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_11_171252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "estates", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "has_vacancy"
+    t.bigint "landlord_profile_id", null: false
+    t.string "location"
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.index ["landlord_profile_id"], name: "index_estates_on_landlord_profile_id"
+  end
+
+  create_table "house_bills", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "electric_bill"
+    t.bigint "house_id", null: false
+    t.decimal "rent"
+    t.datetime "updated_at", null: false
+    t.decimal "water_bill"
+    t.index ["house_id"], name: "index_house_bills_on_house_id"
+  end
+
+  create_table "houses", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "estate_id", null: false
+    t.integer "house_type", default: 0, null: false
+    t.string "houses_name"
+    t.boolean "is_occupied", default: false
+    t.datetime "updated_at", null: false
+    t.index ["estate_id"], name: "index_houses_on_estate_id"
+  end
+
+  create_table "landlord_profiles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "leases", force: :cascade do |t|
+    t.date "begin"
+    t.datetime "created_at", null: false
+    t.date "end"
+    t.bigint "house_id", null: false
+    t.bigint "tenant_profile_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["house_id"], name: "index_leases_on_house_id"
+    t.index ["tenant_profile_id"], name: "index_leases_on_tenant_profile_id"
+  end
 
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -42,6 +88,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_08_153109) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "estates", "landlord_profiles"
+  add_foreign_key "house_bills", "houses"
+  add_foreign_key "houses", "estates"
+  add_foreign_key "leases", "houses"
+  add_foreign_key "leases", "tenant_profiles"
   add_foreign_key "sessions", "users"
   add_foreign_key "tenant_profiles", "users"
 end
