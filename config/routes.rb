@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
-  # User routes
-  get "users" => "users#index", as: :users
+  namespace :kodisha do
+    resources :users
+  end
 
-  get "users/new" => "users#new", as: :new_user
-  post "users" => "users#create"
-
-  get "users/:id" => "users#show", as: :user
+  get "landlord_profiles/index"
+  get "landlord_profiles/show"
+  get "landlord_profiles/new"
   # Defines the root path route ("/")
-  root "users#index"
+  root "kodisha/users#index"
+
+  # Landlord profile routes
+
 
   # Tenant Profile routes
   get "tenants" => "tenant_profiles#index"
