@@ -16,13 +16,28 @@
 #
 #  index_users_on_email_address  (email_address) UNIQUE
 #
-
 <% password_digest = BCrypt::Password.create("password") %>
+
+admin:
+  email_address: admin@example.com
+  password_digest: <%= password_digest %>
+  role: 1
+  firstname: Admin
+  lastname: User
+  phonenumber: "0700000000"
 
 one:
   email_address: one@example.com
   password_digest: <%= password_digest %>
+  role: 0
+  firstname: One
+  lastname: User
+  phonenumber: "0711111111"
 
 two:
   email_address: two@example.com
   password_digest: <%= password_digest %>
+  role: 0
+  firstname: Two
+  lastname: User
+  phonenumber: "0722222222"
