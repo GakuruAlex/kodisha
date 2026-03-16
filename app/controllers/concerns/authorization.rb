@@ -1,9 +1,15 @@
 module Authorization
   extend ActiveSupport::Concern
 
-  class_methods do
+  # Makes it easy to restrict actions to admins
+  module ClassMethods
     def admin_access_only(**options)
-      before_action -> { redirect_to root_path, alert: "You aren't allowed to do that." unless authenticated? && Current.user.admin? }, **options
+      # This block runs in the controller instance
+      before_action(**options) do
+        unless current_user&.admin?
+          render json: { error: "Forbidden: Admins for Users Resources" }, status: :forbidden
+        end
+      end
     end
   end
 end

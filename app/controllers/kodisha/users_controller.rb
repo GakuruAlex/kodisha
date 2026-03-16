@@ -1,44 +1,74 @@
 class Kodisha::UsersController < Kodisha::BaseController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :set_user, only: %i[show update destroy]
+  admin_access_only only: %i[index create update destroy]
 
+  # GET /kodisha/users
   def index
-    @users = User.all
+    users = User.all
+    render json: users
   end
 
+  # GET /kodisha/users/:id
   def show
+    render json: @user
   end
-  def new
-    @user = User.new
-  end
-  def create
-    @user = User.new(user_params)
 
-    if @user.save
-      redirect_to kodisha_users_path, notice: "User created"
+  # POST /kodisha/users
+  def create
+    user = User.new(user_params)
+    if user.save
+      render json: user, status: :created
     else
-      render :new, status: :unprocessable_entity
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  def edit
-  end
 
+  # PUT/PATCH /kodisha/users/:id
   def update
     if @user.update(user_params)
-      redirect_to kodisha_user_path(@user), status: :see_other, notice: "User has been updated"
+      render json: @user, status: :ok
     else
-      render :edit, status: :unprocessable_entity
+      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
+  def set_landlord_profile
+    user = User.find(params[:id])
 
+    if user.landlord_profile.present?
+      return render json: { error: "Profile already exists" }, status: :unprocessable_entity
+    end
+
+    profile = user.create_landlord_profile
+
+    if profile.persisted?
+      user.update(role: "member")
+
+      render json: { role: user.role, profile: profile }, status: :ok
+    else
+      render json: { errors: profile.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+  # DELETE /kodisha/users/:id
   def destroy
+    @user.destroy
+    render json: { message: "User deleted" }, status: :ok
   end
 
   private
+
+
+  # Loads a user based on params[:id]
   def set_user
     @user = User.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "User not found" }, status: :not_found
   end
 
+  # Strong parameters for creating/updating users
+
   def user_params
-    params.require(:user).permit(:email_address, :password, :password_confirmation, :firstname, :lastname, :phonenumber)
+    permitted = %i[email_address password password_confirmation firstname lastname phonenumber]
+    permitted << :role if current_user&.admin?
+    params.require(:user).permit(permitted)
   end
 end

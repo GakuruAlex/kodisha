@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_11_171252) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_16_174427) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,6 +47,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_11_171252) do
   create_table "landlord_profiles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_landlord_profiles_on_user_id"
   end
 
   create_table "leases", force: :cascade do |t|
@@ -91,6 +93,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_11_171252) do
   add_foreign_key "estates", "landlord_profiles"
   add_foreign_key "house_bills", "houses"
   add_foreign_key "houses", "estates"
+  add_foreign_key "landlord_profiles", "users"
   add_foreign_key "leases", "houses"
   add_foreign_key "leases", "tenant_profiles"
   add_foreign_key "sessions", "users"
