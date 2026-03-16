@@ -1,35 +1,34 @@
 class PasswordsController < ApplicationController
-  allow_unauthenticated_access
-  before_action :set_user_by_token, only: %i[ edit update ]
-  rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_password_path, alert: "Try again later." }
+  skip_before_action :authenticate_request, only: [ :create, :edit, :update ]
 
-  def new
-  end
-
+  # Request password reset
   def create
-    if user = User.find_by(email_address: params[:email_address])
-      PasswordsMailer.reset(user).deliver_later
+    user = User.find_by(email_address: params[:email_address])
+    if user
+      token = user.signed_id(purpose: :password_reset, expires_in: 15.minutes)
+      PasswordsMailer.with(user: user, token: token).reset.deliver_later
     end
 
-    redirect_to new_session_path, notice: "Password reset instructions sent (if user with that email address exists)."
+    render json: { message: "If the email exists, a reset link has been sent" }
   end
 
+  # Check if token is valid
   def edit
+    user = User.find_signed!(params[:token], purpose: :password_reset)
+    render json: { message: "Token valid", email: user.email_address }
+  rescue ActiveSupport::MessageVerifier::InvalidSignature
+    render json: { error: "Invalid or expired token" }, status: :unauthorized
   end
 
+  # Reset the password
   def update
-    if @user.update(params.permit(:password, :password_confirmation))
-      @user.sessions.destroy_all
-      redirect_to new_session_path, notice: "Password has been reset."
+    user = User.find_signed!(params[:token], purpose: :password_reset)
+    if user.update(params.permit(:password, :password_confirmation))
+      render json: { message: "Password has been reset" }, status: :ok
     else
-      redirect_to edit_password_path(params[:token]), alert: "Passwords did not match."
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
+  rescue ActiveSupport::MessageVerifier::InvalidSignature
+    render json: { error: "Invalid or expired token" }, status: :unauthorized
   end
-
-  private
-    def set_user_by_token
-      @user = User.find_by_password_reset_token!(params[:token])
-    rescue ActiveSupport::MessageVerifier::InvalidSignature
-      redirect_to new_password_path, alert: "Password reset link is invalid or has expired."
-    end
 end

@@ -1,3 +1,4 @@
 class Kodisha::BaseController < ApplicationController
-  admin_access_only
+  include Authentication
+  include Authorization
 end
