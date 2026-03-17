@@ -22,7 +22,7 @@ class Kodisha::UsersController < Kodisha::BaseController
     if user.save && profile.persisted?
       render json: user, status: :created
     else
-      render json: { user_errors: user.errors.full_messages , profile_errors: profile.errors.full_messages }, status: :unprocessable_entity
+      render json: { user_errors: user.errors.full_messages, profile_errors: profile.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
