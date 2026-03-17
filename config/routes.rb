@@ -2,21 +2,21 @@ Rails.application.routes.draw do
   namespace :kodisha do
     resources :users
     post "users/:id/set_landlord", to: "users#set_landlord_profile", as: "set_landlord_profile"
+    get "landlord_profiles/index"
+    get "landlord_profiles/show"
+    get "landlord_profiles/new"
   end
 
-  get "landlord_profiles/index"
-  get "landlord_profiles/show"
-  get "landlord_profiles/new"
+
   # Defines the root path route ("/")
   root "kodisha/users#index"
 
   # Landlord profile routes
+  namespace :landlord do
+    post "users/:id/tenant", to: "tenant_profiles#create", as: "tenant_profile"
 
-
-  # Tenant Profile routes
-  namespace :kodisha do
-    get "tenants" => "tenant_profiles#index"
   end
+
   resource :session
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

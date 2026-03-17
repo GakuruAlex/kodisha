@@ -1,4 +1,4 @@
-class LandlordProfilesController < ApplicationController
+class Kodisha::LandlordProfilesController < ApplicationController
   before_action only: %i[:show]
   def index
     @landlord_profile = LandlordProfile.all
