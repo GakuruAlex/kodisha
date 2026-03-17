@@ -14,7 +14,6 @@ Rails.application.routes.draw do
   # Landlord profile routes
   namespace :landlord do
     post "users/:id/tenant", to: "tenant_profiles#create", as: "tenant_profile"
-
   end
 
   resource :session
