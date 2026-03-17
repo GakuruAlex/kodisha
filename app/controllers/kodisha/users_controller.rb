@@ -1,6 +1,7 @@
 class Kodisha::UsersController < Kodisha::BaseController
   before_action :set_user, only: %i[show update destroy]
-  admin_access_only only: %i[index create update destroy]
+  admin_access_only only: %i[index create update destroy set_landlord_profile]
+  landlord_access only: %i[create]
 
   # GET /kodisha/users
   def index
@@ -16,10 +17,12 @@ class Kodisha::UsersController < Kodisha::BaseController
   # POST /kodisha/users
   def create
     user = User.new(user_params)
-    if user.save
+    profile = user.create_tenant_profile
+
+    if user.save && profile.persisted?
       render json: user, status: :created
     else
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      render json: { user_errors: user.errors.full_messages , profile_errors: profile.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
