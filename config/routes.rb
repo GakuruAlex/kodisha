@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   namespace :kodisha do
     resources :users
-    post "users/:id/set_landlord", to: "users#set_landlord_profile", as: "set_landlord_profile"
+    post "users/:id/make-landlord", to: "users#set_landlord_profile", as: "set_landlord_profile"
     get "landlord_profiles/index"
     get "landlord_profiles/show"
     get "landlord_profiles/new"
