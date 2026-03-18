@@ -1,4 +1,4 @@
-class SessionsController < ApplicationController
+class LoginsController < ApplicationController
   skip_before_action :authenticate_request, only: [ :create ]
 
   def create

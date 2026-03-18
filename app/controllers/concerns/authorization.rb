@@ -6,14 +6,14 @@ module Authorization
     def admin_access_only(**options)
       before_action(**options) do
         unless current_user&.admin?
-          render json: { error: "Forbidden: Admins for Users Resources" }, status: :forbidden
+          render json: { error: "Forbidden: Admins only Resources" }, status: :forbidden
         end
       end
     end
     def landlord_access(**options)
       before_action(**options) do
         unless current_user&.member?
-          render json: { error: "Forbidden: Admins for Users Resources" }, status: :forbidden
+          render json: { error: "Forbidden: Landlord only Resources" }, status: :forbidden
         end
       end
     end
