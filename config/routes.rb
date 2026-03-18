@@ -13,10 +13,14 @@ Rails.application.routes.draw do
 
   # Landlord profile routes
   namespace :landlord do
-    post "users/:id/tenant", to: "tenant_profiles#create", as: "tenant_profile"
+    post "users/landlord/new-tenant", to: "tenant_profiles#create", as: "new_tenant_profile"
+    get "estates", to: "estates#index", as: "estates"
+    post "estates", to: "estates#create", as: "create_estate"
+    get "estates/:id", to: "estates#show", as: "estate"
+    patch "estates/:id/update", to: "estates#update", as: "update_estate"
   end
 
-  resource :session
+  resource :login
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
