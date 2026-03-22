@@ -6,7 +6,7 @@ module Authorization
     def admin_access_only(**options)
       before_action(**options) do
         unless current_user&.admin?
-          render json: { error: "Forbidden: Admins only Resources" }, status: :forbidden
+          render json: { error: "Forbidden: Admins only Resource" }, status: :forbidden
         end
       end
     end
