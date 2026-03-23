@@ -4,6 +4,14 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true
+  config.after_initialize do
+      Bullet.enable        = true
+      Bullet.console       = true
+      Bullet.rails_logger  = true
+      Bullet.bullet_logger = true
+  end
+
+
 
   # Do not eager load code on boot.
   config.eager_load = false
