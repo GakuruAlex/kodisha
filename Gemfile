@@ -15,6 +15,7 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 gem "jwt"
+gem "bullet", group: :development
 
 # postgres db
 gem "pg"
@@ -30,7 +31,7 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 gem "faker"
-gem "active_model_serializers", "~> 0.10.0"
+gem "active_model_serializers"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false

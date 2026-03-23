@@ -13,7 +13,7 @@ module Authorization
     def landlord_access(**options)
       before_action(**options) do
         unless current_user&.member?
-          render json: { error: "Forbidden: Landlord only Resources" }, status: :forbidden
+          render json: { error: "Forbidden: Landlord only Resource" }, status: :forbidden
         end
       end
     end
