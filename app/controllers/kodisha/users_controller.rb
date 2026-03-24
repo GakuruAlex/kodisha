@@ -5,7 +5,7 @@ class Kodisha::UsersController < Kodisha::BaseController
 
   # GET /kodisha/users
   def index
-    users = User.all
+    users = User.includes(:tenant_profile, :landlord_profile)
     render json: users
   end
 
