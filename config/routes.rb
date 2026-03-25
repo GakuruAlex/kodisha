@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
   namespace :kodisha do
-    resources :users
+    get "users", to: "users#index", as: "users"
+    post "users", to: "users#create", as: "new_user"
     post "users/:id/make-landlord", to: "users#set_landlord_profile", as: "set_landlord_profile"
-    get "landlord_profiles/index"
-    get "landlord_profiles/show"
-    get "landlord_profiles/new"
+    patch "users/:id", to: "users#update", as: "update_user"
   end
 
 
@@ -13,11 +12,10 @@ Rails.application.routes.draw do
 
   # Landlord profile routes
   namespace :landlord do
-    post "users/landlord/new-tenant", to: "tenant_profiles#create", as: "new_tenant_profile"
+    get "tenant-profiles", to: "tenant_profiles#index", as: "tenant_profiles"
     get "estates", to: "estates#index", as: "estates"
-    post "estates", to: "estates#create", as: "create_estate"
-    get "estates/:id", to: "estates#show", as: "estate"
-    patch "estates/:id/update", to: "estates#update", as: "update_estate"
+    post "new-tenant", to: "tenant_profiles#create", as: "new_tenant"
+    post "new-estate", to: "estates#create", as: "new_estate"
   end
 
   resource :login
