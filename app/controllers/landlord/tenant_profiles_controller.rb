@@ -1,9 +1,9 @@
 class Landlord::TenantProfilesController < Kodisha::BaseController
-  before_action :set_tenant_profile, only: [ :show ]
-  landlord_access only: %i[create]
+  before_action :set_tenant_profile, only: %i[ show ]
+  allow_roles "admin", "member", only: [ :create, :index ]
 
   def index
-    tenant_profiles = User.all.where(role: :guest)
+    tenant_profiles = TenantProfile.all
     render json: tenant_profiles
   end
 
@@ -34,6 +34,8 @@ class Landlord::TenantProfilesController < Kodisha::BaseController
   end
 
   def tenant_profile_params
-    params.require(:tenant_profile).permit(:firstname, :lastname, :phonenumber, :email_address)
+    perimitted = %i[firstname lastname phonenumber email_address]
+    permitted << :role if current_user&.admin?
+    params.require(:tenant_profile).permit(perimitted)
   end
 end

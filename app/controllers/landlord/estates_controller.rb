@@ -1,6 +1,6 @@
 class Landlord::EstatesController < ApplicationController
-  landlord_access only: %i[index create show update]
   before_action :set_estate, only: %i[show update]
+  allow_roles "member", only: [ :index, :create, :show, :update ]
   def index
     if current_user.landlord_profile
       render json: current_user.landlord_profile.estates, status: :ok
@@ -9,16 +9,12 @@ class Landlord::EstatesController < ApplicationController
     end
   end
   def create
-    if current_user.landlord_profile
-      estate = current_user.landlord_profile.estates.new(name: estate_params[name], location: estate_params[location], has_vacancy: true)
+      estate = current_user.landlord_profile.estates.new(name: estate_params[:name], location: estate_params[:location], has_vacancy: true)
       if estate.save
         render json: estate, status: 201
       else
-        render json: estate.errors.full_messages, status: 422
+        render json: estate.errors.to_hash, status: 422
       end
-    else
-      render json: { "create errors": current_user.errors.full_messages }, status: 403
-    end
   end
   def show
     if @estate

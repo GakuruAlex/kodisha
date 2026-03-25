@@ -1,5 +1,6 @@
 class Kodisha::LandlordProfilesController < ApplicationController
   before_action only: %i[:show]
+  allow_roles "admin", only: [ :index, :create, :update ]
   def index
     @landlord_profile = LandlordProfile.all
     render json: @landlord_profile
