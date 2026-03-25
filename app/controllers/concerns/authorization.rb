@@ -1,19 +1,13 @@
 module Authorization
   extend ActiveSupport::Concern
 
-  # Makes it easy to restrict actions to admins
+  # Role Based Access Control
   module ClassMethods
-    def admin_access_only(**options)
+    def allow_roles(*roles, **options)
       before_action(**options) do
-        unless current_user&.admin?
-          render json: { error: "Forbidden: Admins only Resource" }, status: :forbidden
-        end
-      end
-    end
-    def landlord_access(**options)
-      before_action(**options) do
-        unless current_user&.member?
-          render json: { error: "Forbidden: Landlord only Resource" }, status: :forbidden
+        unless roles.include?(current_user.role)
+          render json: { error: "You are not authorized to access that resource" }, status: :forbidden
+
         end
       end
     end

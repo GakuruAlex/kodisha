@@ -1,7 +1,7 @@
 class Kodisha::UsersController < Kodisha::BaseController
   before_action :set_user, only: %i[show update destroy]
-  admin_access_only only: %i[index create update destroy set_landlord_profile]
-  landlord_access only: %i[create]
+  allow_roles "admin", only: %i[index update destroy set_landlord_profile]
+  allow_roles "member", only: [ :create ]
 
   # GET /kodisha/users
   def index
