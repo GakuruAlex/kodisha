@@ -3,12 +3,12 @@
 # Table name: houses
 #
 #  id          :integer          not null, primary key
-#  estate_id   :integer          not null
 #  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  houses_name :string
+#  estate_id   :integer          not null
 #  house_type  :integer          default(0), not null
 #  is_occupied :boolean          default(FALSE)
+#  updated_at  :datetime         not null
+#  house_name  :string
 #
 # Indexes
 #
