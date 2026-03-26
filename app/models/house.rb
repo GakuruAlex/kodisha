@@ -3,12 +3,12 @@
 # Table name: houses
 #
 #  id          :integer          not null, primary key
-#  estate_id   :integer          not null
 #  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  houses_name :string
+#  estate_id   :integer          not null
 #  house_type  :integer          default(0), not null
 #  is_occupied :boolean          default(FALSE)
+#  updated_at  :datetime         not null
+#  house_name  :string
 #
 # Indexes
 #
@@ -16,9 +16,12 @@
 #
 
 class House < ApplicationRecord
-  enum :house_type, { bed_sitter: 0, one_bedroom: 1, two_bedroom: 2 }, default: :bed_sitter
+  enum :house_type, { bed_sitter: 0, one_bedroom: 1, two_bedroom: 2 }, default: "bed_sitter"
   belongs_to :estate
   has_many :leases
   has_many :tenant_profiles, through: :leases
   has_one :house_bill
+  validates :house_name, presence: true
+  validates :house_name, length: { minimum: 1 }
+  validates :house_type, inclusion: { in: house_types.keys, message: "%{value} is not a valid house type" }
 end
