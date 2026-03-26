@@ -9,17 +9,12 @@ class Kodisha::LandlordProfilesController < ApplicationController
   def show
   end
 
-  def new
-    @landlord_profile = LandlordProfile.new
-    render json: @landlord_profile
-  end
-
   def create
-    @landlord_profile = LandlordProfile.new(params[:landlord_profile])
+    @landlord_profile = LandlordProfile.new(landlord_profile_params)
     if @landlord_profile.save
       render json: @landlord_profile, status: :created, location: @landlord_profile
     else
-      render "new"
+      render json: { "error": @landlord_profile.errors }
     end
   end
 
