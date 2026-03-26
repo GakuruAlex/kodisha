@@ -16,6 +16,11 @@ Rails.application.routes.draw do
     get "estates", to: "estates#index", as: "estates"
     post "new-tenant", to: "tenant_profiles#create", as: "new_tenant"
     post "new-estate", to: "estates#create", as: "new_estate"
+    namespace :estate do
+      get ":estate_id/houses", to: "houses#index", as: "estate_houses"
+      post ":estate_id/houses", to: "houses#create", as: "new_estate_house"
+      get ":estate_id/houses/:house_id", to: "houses#show", as: "house_detail"
+    end
   end
 
   resource :login
