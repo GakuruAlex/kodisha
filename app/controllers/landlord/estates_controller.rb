@@ -3,7 +3,7 @@ class Landlord::EstatesController < ApplicationController
   allow_roles "member", only: [ :index, :create, :show, :update ]
   def index
     if current_user.landlord_profile
-      render json: current_user.landlord_profile.estates, status: :ok
+      render json: current_user.landlord_profile.estates.includes(:houses), status: :ok
     else
       render json: { "error": current_user.errors.full_messages }, status: 403
     end
