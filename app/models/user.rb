@@ -25,4 +25,5 @@ class User < ApplicationRecord
   has_one :landlord_profile
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+  validates :email_address, uniqueness: true
 end

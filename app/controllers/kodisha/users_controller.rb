@@ -1,7 +1,7 @@
 class Kodisha::UsersController < Kodisha::BaseController
   before_action :set_user, only: %i[show update destroy]
-  allow_roles "admin", only: %i[index update destroy set_landlord_profile]
-  allow_roles "member", only: [ :create ]
+  allow_roles "admin", only: %i[index show update destroy set_landlord_profile]
+  allow_roles "member", "admin", only: [ :create ]
 
   # GET /kodisha/users
   def index
@@ -16,11 +16,17 @@ class Kodisha::UsersController < Kodisha::BaseController
 
   # POST /kodisha/users
   def create
-    user = User.new(user_params)
-    profile = user.create_tenant_profile
+    user = User.create!(
+      firstname: user_params[:firstname],
+      lastname: user_params[:lastname],
+      phonenumber: user_params[:phonenumber],
+      password: SecureRandom.hex(10),
+      email_address: user_params[:email_address],
+    )
+    profile = user.create_tenant_profile!
 
     if user.save && profile.persisted?
-      render json: user, status: :created
+      render json: user,  serializer: Kodisha::UserCreatedSerializer, status: :created
     else
       render json: { user_errors: user.errors.full_messages, profile_errors: profile.errors.full_messages }, status: :unprocessable_entity
     end
@@ -60,11 +66,8 @@ class Kodisha::UsersController < Kodisha::BaseController
   private
 
 
-  # Loads a user based on params[:id]
   def set_user
     @user = User.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "User not found" }, status: :not_found
   end
 
   # Strong parameters for creating/updating users

@@ -1,5 +1,5 @@
 class Kodisha::UserSerializer < ActiveModel::Serializer
-  attributes :id, :phonenumber, :fullname, :email_address
+  attributes :id, :phonenumber, :firstname, :lastname, :email_address
   has_one :tenant_profile
   has_one :landlord_profile
 
