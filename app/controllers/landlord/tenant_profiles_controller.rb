@@ -19,8 +19,9 @@ class Landlord::TenantProfilesController < Kodisha::BaseController
       password: SecureRandom.hex(10),
       email_address: tenant_profile_params[:email_address],
     )
-    if tenant.save
-      tenant_profile = tenant.create_tenant_profile!
+    tenant_profile = tenant.create_tenant_profile!
+
+    if tenant.save && tenant_profile.persisted?
       render json: tenant_profile, status: :created
     else
       render json: { errors: tenant.errors.full_messages }, status: :unprocessable_entity

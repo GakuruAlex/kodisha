@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     post "users", to: "users#create", as: "new_user"
     post "users/:id/make-landlord", to: "users#set_landlord_profile", as: "set_landlord_profile"
     patch "users/:id", to: "users#update", as: "update_user"
+    delete "users/:id", to: "users#destroy", as: "delete_user"
   end
 
 
