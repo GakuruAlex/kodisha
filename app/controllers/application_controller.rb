@@ -7,10 +7,14 @@ rescue_from ActionController::UnpermittedParameters, with: :unpermitted_paramete
 rescue_from ArgumentError, with: :argument_error
 rescue_from ActiveRecord::RecordNotUnique, with: :handle_not_unique
 rescue_from ActiveRecord::RecordInvalid, with: :record_invalid_error
+rescue_from ActiveRecord::InvalidForeignKey, with: :handle_invalid_foreikgn_key
   include Authentication
   include Authorization
 
   private
+  def handle_invalid_foreikgn_key(exception)
+    render json: { error: exception.messaged }, status: :unprocessable_entity
+  end
   def argument_error(exception)
     render json: { error: exception.message }, status: :unprocessable_entity
   end
