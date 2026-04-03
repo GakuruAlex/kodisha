@@ -17,7 +17,7 @@
 
 class House < ApplicationRecord
   enum :house_type, { bed_sitter: 0, one_bedroom: 1, two_bedroom: 2 }, default: "bed_sitter"
-  belongs_to :estate
+  belongs_to :estate, counter_cache: true
   has_many :leases
   has_many :tenant_profiles, through: :leases
   has_one :house_bill

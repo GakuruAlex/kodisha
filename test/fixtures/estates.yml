@@ -3,12 +3,13 @@
 # Table name: estates
 #
 #  id                  :integer          not null, primary key
-#  landlord_profile_id :integer          not null
-#  name                :string
-#  location            :string
-#  has_vacancy         :boolean
 #  created_at          :datetime         not null
+#  has_vacancy         :boolean
+#  landlord_profile_id :integer          not null
+#  location            :string
+#  name                :string
 #  updated_at          :datetime         not null
+#  houses_count        :integer          default(0)
 #
 # Indexes
 #
