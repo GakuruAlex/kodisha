@@ -18,7 +18,7 @@
 
 class Estate < ApplicationRecord
   belongs_to :landlord_profile
-  has_many :houses
+  has_many :houses, dependent: :destroy
   has_many :tenant_profiles, through: :houses
   validates_presence_of :location, :name
 end
