@@ -1,6 +1,6 @@
 class Landlord::EstatesController < ApplicationController
   before_action :set_estate, only: %i[show update destroy]
-  allow_roles "member", only: [ :index, :create, :show, :update , :destroy]
+  allow_roles "member", only: [ :index, :create, :show, :update, :destroy ]
   def index
     if current_user.landlord_profile
       render json: current_user.landlord_profile.estates.includes(:houses), status: :ok
@@ -32,12 +32,12 @@ class Landlord::EstatesController < ApplicationController
         render json: @estate.errors.full_messages, status: 403
       end
     else
-      render json: { "errors": estate.errors.full_messages}, status: 403
+      render json: { "errors": estate.errors.full_messages }, status: 403
     end
   end
   def destroy
     if @estate.destroy
-      render json: {message: "Estate deleted."}, status: :ok
+      render json: { message: "Estate deleted." }, status: :ok
     else
       render json: @estate.errors, status: :unprocessable_entity
     end
