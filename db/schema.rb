@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_03_100743) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_17_174434) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -91,6 +91,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_03_100743) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  create_table "utilities", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "house_id"
+    t.decimal "last_reading"
+    t.string "meter_no"
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.index ["house_id"], name: "index_utilities_on_house_id"
+  end
+
   add_foreign_key "estates", "landlord_profiles"
   add_foreign_key "house_bills", "houses"
   add_foreign_key "houses", "estates"
@@ -99,4 +109,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_03_100743) do
   add_foreign_key "leases", "tenant_profiles"
   add_foreign_key "sessions", "users"
   add_foreign_key "tenant_profiles", "users"
+  add_foreign_key "utilities", "houses"
 end
