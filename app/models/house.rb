@@ -22,6 +22,7 @@ class House < ApplicationRecord
   has_many :tenant_profiles, through: :leases
   has_one :house_bill
   has_many :utilities
+  accepts_nested_attributes_for :utilities, allow_destroy: true
   validates :house_name, presence: true
   validates :house_name, length: { minimum: 1 }
   validates :house_type, inclusion: { in: house_types.keys, message: "%{value} is not a valid house type" }

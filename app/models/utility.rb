@@ -16,5 +16,9 @@
 #
 
 class Utility < ApplicationRecord
+  enum :name, { water_bill: 0, electricity_bill: 1, gas_bill: 2 }
+  validates :name, :meter_no, :last_reading, presence: true
+  validates :meter_no, uniqueness: true
+  validates :last_reading, numericality: { greater_than_or_equal_to: 0 }
   belongs_to :house
 end

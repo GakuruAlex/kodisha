@@ -29,6 +29,9 @@ class Landlord::Estate::HousesController < ApplicationController
     @house = @estate.houses.find(params[:house_id])
   end
   def house_params
-    params.require(:house).permit(:house_name, :house_type, :is_occupied)
+    params.require(:house).permit(:house_name, :house_type,
+                                  :is_occupied, utilities_attributes: [
+        :name, :meter_no, :last_reading
+      ])
   end
 end
