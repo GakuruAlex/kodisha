@@ -10,7 +10,8 @@ Rails.application.configure do
       Bullet.rails_logger  = true
       Bullet.bullet_logger = true
   end
-
+  # Store files locally.
+  config.active_storage.service = :local
 
 
   # Do not eager load code on boot.

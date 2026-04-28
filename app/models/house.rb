@@ -16,12 +16,13 @@
 #
 
 class House < ApplicationRecord
+  has_many_attached :images
   enum :house_type, { bed_sitter: 0, one_bedroom: 1, two_bedroom: 2 }, default: "bed_sitter"
   belongs_to :estate, counter_cache: true
   has_many :leases
   has_many :tenant_profiles, through: :leases
   has_one :house_bill
-  has_many :utilities
+  has_many :utilities, dependent: :destroy
   accepts_nested_attributes_for :utilities, allow_destroy: true
   validates :house_name, presence: true
   validates :house_name, length: { minimum: 1 }

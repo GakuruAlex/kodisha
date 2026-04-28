@@ -3,7 +3,7 @@ class Landlord::Estate::HousesController < ApplicationController
   before_action :set_house, only: %i[ show ]
   allow_roles "member", only: %i[index show create]
   def index
-    houses = @estate.houses
+    houses = @estate.houses.includes(:utilities)
     render json: houses, status: 200
   end
 
@@ -13,6 +13,7 @@ class Landlord::Estate::HousesController < ApplicationController
 
   def create
     estate_house = @estate.houses.create(house_params)
+    estate_house.images.attach(params[:images])
     if estate_house.persisted?
       render json: estate_house, status: 201
     else
@@ -32,6 +33,6 @@ class Landlord::Estate::HousesController < ApplicationController
     params.require(:house).permit(:house_name, :house_type,
                                   :is_occupied, utilities_attributes: [
         :name, :meter_no, :last_reading
-      ])
+      ], images: [])
   end
 end

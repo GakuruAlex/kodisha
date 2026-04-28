@@ -3,22 +3,23 @@ class Landlord::EstatesController < ApplicationController
   allow_roles "member", only: [ :index, :create, :show, :update, :destroy ]
   def index
     if current_user.landlord_profile
-      render json: current_user.landlord_profile.estates.includes(:houses), status: :ok
+      render json: current_user.landlord_profile.estates.includes(:houses, :image_attachment),  host: request.base_url, status: :ok
     else
       render json: { "error": current_user.errors.full_messages }, status: 403
     end
   end
   def create
       estate = current_user.landlord_profile.estates.new(name: estate_params[:name], location: estate_params[:location], has_vacancy: true)
+      estate.image.attach(params[:estate][:image])
       if estate.save
-        render json: estate, status: 201
+        render json: estate, host: request.base_url, status: 201
       else
         render json: estate.errors.to_hash, status: 422
       end
   end
   def show
     if @estate
-      render json: @estate, status: 200
+      render json: @estate,  host: request.base_url, status: 200
     else
       render json: { "error": @estate.errors.full_messages }, status: 403
     end
@@ -48,6 +49,6 @@ class Landlord::EstatesController < ApplicationController
     @estate = current_user.landlord_profile.estates.find(params[:estate_id])
   end
   def estate_params
-    params.require(:estate).permit(:name, :location, :has_vacancy)
+    params.require(:estate).permit(:name, :location, :has_vacancy, :image)
   end
 end
