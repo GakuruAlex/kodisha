@@ -3,8 +3,8 @@ class Landlord::Estate::HousesController < ApplicationController
   before_action :set_house, only: %i[ show ]
   allow_roles "member", only: %i[index show create]
   def index
-    houses = @estate.houses.includes(:utilities)
-    render json: houses, status: 200
+    houses = @estate.houses.includes(:utilities, :image_attachment)
+    render json: houses, each_serializer: HouseSerializer, status: 200
   end
 
   def show
@@ -15,7 +15,7 @@ class Landlord::Estate::HousesController < ApplicationController
     estate_house = @estate.houses.create(house_params)
     estate_house.images.attach(params[:images])
     if estate_house.persisted?
-      render json: estate_house, status: 201
+      render json: estate_house, serializer: HouseCreateSerializer, status: 201
     else
       render json: { "error": estate_house.errors.full_message }, status: 403
     end

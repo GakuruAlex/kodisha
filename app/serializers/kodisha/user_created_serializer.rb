@@ -1,3 +1,3 @@
 class Kodisha::UserCreatedSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id,:password
 end
