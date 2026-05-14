@@ -1,10 +1,10 @@
 class Landlord::Estate::HousesController < ApplicationController
-  before_action :set_estate, only: %i[ index create show]
-  before_action :set_house, only: %i[ show ]
-  allow_roles "member", only: %i[index show create]
+  before_action :set_estate, only: %i[ index create show update destroy]
+  before_action :set_house, only: %i[ show update destroy]
+  allow_roles "member", only: %i[index show create update destroy]
   def index
     houses = @estate.houses.includes(:utilities, images_attachments: :blob)
-    render json: houses, each_serializer: HouseSerializer, status: 200, host: request.base_url
+    render json: houses, each_serializer: Landlord::Estate::HouseSerializer, status: 200, host: request.base_url
   end
 
   def show
@@ -19,6 +19,14 @@ class Landlord::Estate::HousesController < ApplicationController
     else
       render json: { "error": estate_house.errors.full_message }, status: 403
     end
+  end
+
+  def update
+    @house.update(house_params)
+  end
+
+  def destroy
+    @house.destroy
   end
 
   private

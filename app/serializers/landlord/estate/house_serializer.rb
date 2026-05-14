@@ -5,12 +5,11 @@ class Landlord::Estate::HouseSerializer < ActiveModel::Serializer
   def images
     return nil unless object.images.attached?
     object.images.map do |image|
-      #rails_blob_url(image, only_path: true),       host: instance_options[:host]
+      # rails_blob_url(image, only_path: true),       host: instance_options[:host]
       rails_representation_url(
       image.variant(resize_to_limit: [ 800, 600 ]).processed,
       host: instance_options[:host]
     )
-
     end
   end
 end
