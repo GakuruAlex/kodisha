@@ -8,19 +8,27 @@ class Landlord::Estate::HousesController < ApplicationController
   end
 
   def show
-    render json: @house
+    @house.reload(includes: [ :utilities, images_attachments: :blob ])
+    render json: @house, host: request.base_url
   end
 
   def create
-    estate_house = @estate.houses.create(house_params)
-    estate_house.images.attach(params[:images])
-    if estate_house.persisted?
-      render json: estate_house, serializer: Landlord::Estate::HouseCreateSerializer, status: 201,  host: request.base_url
-    else
-      render json: { "error": estate_house.errors.full_message }, status: 403
-    end
-  end
+  estate_house = @estate.houses.new(house_params)
 
+  estate_house.images.attach(params[:images]) if params[:images]
+
+  if estate_house.save
+
+    estate_house.reload(includes: [ :utilities, images_attachments: :blob ])
+
+    render json: estate_house,
+           serializer: Landlord::Estate::HouseCreateSerializer,
+           status: :created,
+           host: request.base_url
+  else
+    render json: { "error": estate_house.errors.full_messages }, status: :forbidden
+  end
+end
   def update
     @house.update(house_params)
   end
