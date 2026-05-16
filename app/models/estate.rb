@@ -22,6 +22,7 @@ class Estate < ApplicationRecord
   has_many :houses, dependent: :destroy
   has_many :tenant_profiles, through: :houses
   validates_presence_of :location, :name, :image
+  validates :name, uniqueness: { scope: :location }
   validates :name, length: { minimum: 3, maximum: 50 }
   validates :location, length: { minimum: 2 }
 end

@@ -14,7 +14,9 @@ class Landlord::EstatesController < ApplicationController
       if estate.save
         render json: estate, host: request.base_url, status: 201
       else
-        render json: estate.errors.to_hash, status: 422
+        render json: {
+                      error: estate.errors.full_messages.first
+                    }, status: 422
       end
   end
   def show
