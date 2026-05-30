@@ -30,7 +30,7 @@ class Landlord::EstatesController < ApplicationController
     if @estate
       @estate.update(estate_params)
       if @estate.save
-        render json: @estate, status: 200
+        render json: @estate, status: 200, host: request.base_url
       else
         render json: @estate.errors.full_messages, status: 403
       end

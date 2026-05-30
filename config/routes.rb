@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get "estates", to: "estates#index", as: "estates"
     post "new-tenant", to: "tenant_profiles#create", as: "new_tenant"
     post "new-estate", to: "estates#create", as: "new_estate"
+    patch "estates/:estate_id", to: "estates#update", as: "update_estate"
     delete "estates/:estate_id", to: "estates#destroy", as: "delete_estate"
 
     namespace :estate do
